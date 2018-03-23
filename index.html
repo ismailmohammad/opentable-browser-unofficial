@@ -27,7 +27,7 @@
             <a href="#" class="brand-logo" style="font-weight: bold;">OpenTable Restaurant Browser</a>
             <a href="#" data-activates="mobile-sidenav" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-              <li><a href="#search">Search</a></li>
+              <li><a href="#search">Browse</a></li>
             </ul>
           </div>
         </nav>
@@ -56,10 +56,10 @@
       <div id="search" class="center col s6">
           <div class="row">
               <form class="col s6 offset-s3">
-                <div class="row">
+                <div class="row card-panel">
                     <div class="input-field col s12">
                         <i class="material-icons prefix">location_city</i>
-                        <input type="text" id="autocomplete-cities" class="autocomplete" on-change="console.log($('this').data('id'),3000)">
+                        <input type="text" id="autocomplete-cities" class="autocomplete" autocomplete="off">
                         <label for="autocomplete-cities">Please enter the desired city</label>
                     </div>
                     <a href="javascript: getRestaurants('#autocomplete-cities');" class="waves-effect waves-light btn">Search</a>
@@ -77,12 +77,11 @@
             <div>
               <h4>Disclaimer: </h4>
               <h6 class="grey-text text-lighten-4">This web application is NOT affiliated with OpenTable Inc., any of its products or employees. Content parsed from the <a href="https://opentable.herokuapp.com/">unofficial Public API</a> has been represented as is. </h6>
-              <h6 class="grey-text text-lighten-4" style="margin-top: 15px;">Email: <a href="mailto:ismail.mohammad.n@gmail.com">ismail.mohammad.n@gmail.com</a></h6>
             </div>
           </div>
           <div class="red darken-4 footer-copyright">
             <div class="container">
-            © OpenTable Restaurant Browser 2018
+            © Mohammad Ismail 2018
             </div>
           </div>
         </div>
