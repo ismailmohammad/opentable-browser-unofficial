@@ -8,3 +8,6 @@ a {
 .home-text {
   text-shadow: 2px 2px black;
 }
+#api-link{
+  font-weight: bold;
+}

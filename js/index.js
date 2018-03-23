@@ -2,11 +2,15 @@ window.cities = {};
 window.cityJSON = {};
 window.restaurantsForCity = [];
 var totalRestaurantsCity;
+// Price Icons to be used when populating the table
+var priceIcons = {1: null, 2: null, 3: null, 4: null};
 $(document).ready(function () {
-           getCities();
-          // Initialize Toasts
-          $('.tooltipped').tooltip();
-        });
+  getCities();
+  // Initialize Toasts
+  $('.tooltipped').tooltip();
+  // Hide Table on document load
+  $('#result-table-div').hide();
+});
 
 function getCities() {
   // The API endpoint involved with retreiving the entire list of cities
@@ -71,17 +75,41 @@ function getRestaurants(inputId){
     // calculate how many pages/times to poll
     var callIterations = Math.ceil(totalRestaurantsCity/100);
     // Iterate through the number of pages in question
-    for (i = 1; i < callIterations + 1; i++) {
+    for (pageNum = 1; pageNum < callIterations + 1; pageNum++) {
       // Concatenate the necessary endpoint for the page in question
-      endpoint = 'http://opentable.herokuapp.com/api/restaurants?city=' + $(inputId).val().toString() +"&per_page=100" + "&page=" + (i).toString();
+      endpoint = 'http://opentable.herokuapp.com/api/restaurants?city=' + $(inputId).val().toString() +"&per_page=100" + "&page=" + (pageNum).toString();
       // Set the endpoint of the ajax settings to the newly created endpoint string
       settings.url = endpoint;
       // Send the request and execure the following when done
       $.ajax(settings).done(function (response) {
         // Populate the restaurants array with dicts for each page
         window.restaurantsForCity[response.current_page - 1] = response.restaurants;
+        // Load the restaurants for the initial page
+        loadRestaurants(response.current_page - 1);
+      }).catch( function(error) {
+        Materialize.toast('An error occurred', 1000);
       });
     }
+    // Show results table after populating it
+    $('#result-table-div').show();
+  }).then( function() {
+    // Load the restaurants for the initial page
+    loadRestaurants(0);
   });
 }
 
+
+function loadRestaurants(page) {
+  console.log(page);
+  for (restaurant = 0; restaurant < restaurantsForCity[page].length; restaurant++) {
+    console.log(restaurant)
+    var name = restaurantsForCity[page][restaurant].name;
+    var address = restaurantsForCity[page][restaurant].address;
+    var price = restaurantsForCity[page][restaurant].price;
+    $('#result-table > tbody:last-child').append(`<tr><td>${name}</td><td>${address}</td><td>${price}</td></tr>`);
+  }
+}
+
+function scrollToTop() {
+  $("html, body").animate({ scrollTop: 0 }, "slow");
+}
