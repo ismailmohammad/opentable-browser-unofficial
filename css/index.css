@@ -1,0 +1,10 @@
+html {
+  font-family: 'Quicksand', sans-serif;
+  background-color: blanchedalmond;
+}
+a {
+  color: white;
+}
+.home-text {
+  text-shadow: 2px 2px black;
+}
