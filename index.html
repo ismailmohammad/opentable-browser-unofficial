@@ -47,7 +47,7 @@
           <div class="col-12" style="width: 100%;">
             <h1 class="center-align white-text home-text" style="margin-bottom: 0; font-weight: bold;">OpenTable Restaurant Browser</h1>
             <h5 class="center-align white-text home-text" style="margin-top: 2px; font-style: italic;">Discover restaurants in your area today</h5>
-            <p class="center-align"><a class="waves-effect waves-light btn-large modal-trigger red darken-3" onclick="" href="#search">Browse Now</a></p>
+            <p class="center-align"><a class="waves-effect waves-light btn-large modal-trigger red darken-3" href="javascript: scrollTo('#search');">Browse Now</a></p>
           </div>
         </div>
       </header>
@@ -67,10 +67,20 @@
                         <input type="text" id="outcode-input" maxlength="3" onkeydown="toUpperCase(this)">
                         <label for="outcode-input">Please Enter Outcode</label>
                     </div>
-                    <div id="restrict-outcode-div" onclick="restrictPostcode('#restrict-outcode-chk');" class="col s12" style="padding-bottom: 20px;" >
+                    <div id="country-select-div" class="input-field col s12">
+                      <select id="country-select">
+                        <option value="" disabled selected>Select Country</option>
+                      </select>
+                      <label for="country-select">Select Country to restrict to</label>
+                    </div>
+                    <div id="restrict-outcode-div" onclick="restrictPostcode('#restrict-outcode-chk');" class="col s12" style="padding-bottom: 20px;">
                       <input id="restrict-outcode-chk" type="checkbox">
                       <label for="restrict-outcode-chk">Search within Canadian Postal Code/ "Outcode" (First 3 ie. A0A)</label>
                     </div>
+                    <div id="restrict-country-div" onclick="restrictCountry('#restrict-country-chk');" class="col s12" style="padding-bottom: 20px;">
+                        <input id="restrict-country-chk" type="checkbox">
+                        <label for="restrict-country-chk">Select country to refine search to</label>
+                      </div>
                     <a href="javascript: getRestaurants('#autocomplete-cities');" class="waves-effect waves-light btn">Search</a>
                 </div>
               </form>
