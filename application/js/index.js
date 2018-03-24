@@ -219,9 +219,9 @@ function loadRestaurants(page) {
   // create the id for the pagination
   var pageId = '#pg-indicator-'+(page+1);
   // Remove active class
-  $("#table-pages > li").removeClass("active");
+  $("#table-pages > li").removeClass(['active','red', 'darken-4']);
   // Set the pagination number to active
-  $(pageId).addClass('active');
+  $(pageId).addClass(['active','red', 'darken-4']);
   }
 }
 
