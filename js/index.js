@@ -1,15 +1,18 @@
+
 window.cities = {};
 window.cityJSON = {};
 window.restaurantsForCity = [];
 var totalRestaurantsCity;
 // Price Icons to be used when populating the table
-var priceIcons = {1: null, 2: null, 3: null, 4: null};
+var priceIcons = {1: '<i class="material-icons">attach_money</i>', 2: '<i class="material-icons">attach_money</i><i class="material-icons">attach_money</i>', 3: '<i class="material-icons">attach_money</i><i class="material-icons">attach_money</i><i class="material-icons">attach_money</i>', 4: '<i class="material-icons">attach_money</i><i class="material-icons">attach_money</i><i class="material-icons">attach_money</i><i class="material-icons">attach_money</i>'};
 $(document).ready(function () {
   getCities();
   // Initialize Toasts
   $('.tooltipped').tooltip();
   // Hide Table on document load
   $('#result-table-div').hide();
+  // Hide outcode restriction on document load
+  $('#outcode-div').hide();
 });
 
 function getCities() {
@@ -29,6 +32,7 @@ function getCities() {
     var city;
     for (var x in window.cities.cities) {
       city = String(window.cities.cities[x]);
+      // The null is a placeholder for images that would normally take its place
       cityJSON[city] = null;
     }
 	}).then( function() {
@@ -41,11 +45,15 @@ function getCities() {
 }
 
 function getRestaurants(inputId){
+  // Validate Fields
   if ($(inputId).val() == "") {
     Materialize.toast('Please Enter a city', 1000);
     return false;
   } else if (!($(inputId).val() in cityJSON)) {
     Materialize.toast('City not found. Please try correcting the city name', 1000);
+    return false;
+  } else if (($('#restrict-outcode-chk').is(':checked')) && ($('#outcode-input').val() == "")) {
+    Materialize.toast("Please enter an outcode, or uncheck the filter", 1000);
     return false;
   }
   // Clear Restaurants before Fetch
@@ -72,6 +80,8 @@ function getRestaurants(inputId){
       return false;
     }
   }).then(function() {
+    // Clear pagination
+    $('#table-pages > li').remove();
     // calculate how many pages/times to poll
     var callIterations = Math.ceil(totalRestaurantsCity/100);
     // Iterate through the number of pages in question
@@ -85,31 +95,66 @@ function getRestaurants(inputId){
         // Populate the restaurants array with dicts for each page
         window.restaurantsForCity[response.current_page - 1] = response.restaurants;
         // Load the restaurants for the initial page
-        loadRestaurants(response.current_page - 1);
+        loadRestaurants(0);
       }).catch( function(error) {
         Materialize.toast('An error occurred', 1000);
       });
+      $('#table-pages').append(`<li id="pg-indicator-${pageNum}" class=""><a href="javascript: loadRestaurants(${pageNum - 1})">${pageNum}</a></li>`);
     }
-    // Show results table after populating it
-    $('#result-table-div').show();
-  }).then( function() {
-    // Load the restaurants for the initial page
-    loadRestaurants(0);
   });
+  // Show results table after populating it
+  $('#result-table-div').show();
 }
 
 
-function loadRestaurants(page) {
-  console.log(page);
-  for (restaurant = 0; restaurant < restaurantsForCity[page].length; restaurant++) {
-    console.log(restaurant)
-    var name = restaurantsForCity[page][restaurant].name;
-    var address = restaurantsForCity[page][restaurant].address;
-    var price = restaurantsForCity[page][restaurant].price;
-    $('#result-table > tbody:last-child').append(`<tr><td>${name}</td><td>${address}</td><td>${price}</td></tr>`);
+function loadPaginationNums() {
+  for (pageNum = 1; pageNum <= restaurantsForCity.length; pageNum++) {
+    $('#table-pages').append(`<li id="pg-indicator-${pageNum}" class=""><a href="javascript: loadRestaurants(${pageNum - 1})">${pageNum}</a></li>`);
   }
 }
 
+function loadRestaurants(page) {
+  // Clear the table for repolutation
+  $('#result-table tbody > tr').remove();
+  for (restaurant = 0; restaurant < restaurantsForCity[page].length; restaurant++) {
+    var entry = restaurantsForCity[page][restaurant] 
+    var name = entry.name;
+    var address = entry.address + ", " + entry.city + ", " + entry.state + ", " + entry.postal_code + ", " + entry.country;
+    var price = priceIcons[parseInt(entry.price)];
+    var link = entry.reserve_url;
+    $('#result-table > tbody:last-child').append(`<tr><td><a href="${link}">${name}</a></td><td><a href="https://www.google.com/maps/search/?api=1&query=${address}">${address}</a></td><td style="color: green;">${price}</td></tr>`);
+  }
+  // create the id for the pagination
+  var pageId = '#pg-indicator-'+(page+1);
+  // Remove active class
+  $("#table-pages > li").removeClass("active");
+  // Set the pagination number to active
+  $(pageId).addClass('active');
+}
+
 function scrollToTop() {
+  // Scroll to the top while animating slowly
   $("html, body").animate({ scrollTop: 0 }, "slow");
+}
+
+function restrictPostcode(checkboxID) {
+  // Set the function for the checkbox click
+	$(checkboxID).click(function() {
+		var restrict = $(checkboxID).is(':checked');
+		if (restrict){
+      // Show the field again
+      $('#outcode-div').show();
+		} else {
+      // Hide the cities input field
+			$('#outcode-div').hide();
+			// Clear the quantity field
+			$('#outcode-input').val('');
+		}
+	});
+}
+
+function toUpperCase(input){
+  setTimeout(function(){
+      input.value = input.value.toUpperCase();
+  }, 1);
 }

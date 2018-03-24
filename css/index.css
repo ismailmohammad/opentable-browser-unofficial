@@ -2,8 +2,9 @@ html {
   font-family: 'Quicksand', sans-serif;
   background-color: blanchedalmond;
 }
-a {
-  color: white;
+a:hover {
+  color: black;
+  font-weight: bold;
 }
 .home-text {
   text-shadow: 2px 2px black;

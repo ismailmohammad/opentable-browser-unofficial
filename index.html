@@ -56,11 +56,20 @@
       <div id="search" class="center col s6">
           <div class="row">
               <form class="col s6 offset-s3">
-                <div class="row card-panel">
-                    <div class="input-field col s12">
+                <div class="card-panel">
+                    <div id="cities-input-div" class="input-field col s12">
                         <i class="material-icons prefix">location_city</i>
                         <input type="text" id="autocomplete-cities" class="autocomplete" autocomplete="off">
                         <label for="autocomplete-cities">Please enter the desired city</label>
+                    </div>
+                    <div id="outcode-div" class="input-field col s12">
+                        <i class="material-icons prefix">location_on</i>
+                        <input type="text" id="outcode-input" maxlength="3" onkeydown="toUpperCase(this)">
+                        <label for="outcode-input">Please Enter Outcode</label>
+                    </div>
+                    <div id="restrict-outcode-div" onclick="restrictPostcode('#restrict-outcode-chk');" class="col s12" style="padding-bottom: 20px;" >
+                      <input id="restrict-outcode-chk" type="checkbox">
+                      <label for="restrict-outcode-chk">Search within Canadian Postal Code/ "Outcode" (First 3 ie. A0A)</label>
                     </div>
                     <a href="javascript: getRestaurants('#autocomplete-cities');" class="waves-effect waves-light btn">Search</a>
                 </div>
@@ -84,6 +93,8 @@
                     <tbody>
                     </tbody>
                   </table>
+                  <ul id="table-pages" class="pagination">
+                  </ul>
             </div>
           </div>
         </div>
