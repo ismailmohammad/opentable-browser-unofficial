@@ -23,7 +23,7 @@ I chose to stick to the Native JavaScript Platform and mostly used the JQuery li
 }
 ```
  5. **Please describe yourself using JSON.**
- ``` json
+``` json
 {
   "firstName": "Mohammad",
   "lastName": "Ismail",
@@ -65,5 +65,6 @@ I chose to stick to the Native JavaScript Platform and mostly used the JQuery li
     "mangoes"
   ]
 }
- ```
+```
+
 ###### Notes: I was initially confused regarding the outcode user story, authorization, and the acceptance criteria. This test seems to an adapted version of the Just Eat recruitment test (<https://github.com/justeat/JustEat.International.ApiRecruitmentTest>), based in the UK so SE19 makes sense for that and the API that they used since UK is not one of the countries for the API within the initial email. I did hear back regarding authorization credentials from OpenTable from the link provided in the email (<https://platform.opentable.com/documentation/#authorization>) and my sign-up was rejected so I continued based on my assumptions with regards to dealing with Canadian (M5H, M1E, etc.) "outcodes". Other countries/states were also considered, ie. New York and isolating for "100", "101". Additionally, the acceptance criteria listed some fields that were exclusive to the Just Eat API, ie. Cuisine and Rating. I have tried to accommodate to the best of my abilities. The webapp is also deployed at <https://ismail-opentable-browser.firebaseapp.com/>.
