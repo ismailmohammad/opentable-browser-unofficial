@@ -115,12 +115,11 @@ function getRestaurants(inputId){
   var endpoint;
   // If country is selected, add to the endpoint link
   if (restrictCountry) {
-    endpoint = 'http://opentable.herokuapp.com/api/restaurants?city=' + $(inputId).val() + "&per_page=5&country=" + $('#country-select').val();
-    console.log(endpoint);
+    endpoint = 'https://opentable.herokuapp.com/api/restaurants?city=' + $(inputId).val() + "&per_page=5&country=" + $('#country-select').val();
   } else {
-    endpoint = 'http://opentable.herokuapp.com/api/restaurants?city=' + $(inputId).val() + "&per_page=5"; 
+    endpoint = 'https://opentable.herokuapp.com/api/restaurants?city=' + $(inputId).val() + "&per_page=5"; 
   }
-  // Initialize the settings to be used for the JQuery AJAX http request
+  // Initialize the settings to be used for the JQuery AJAX https request
   var settings = {
 	  "async": true,
 	  "crossDomain": true,
@@ -139,7 +138,7 @@ function getRestaurants(inputId){
       // Hide the results table
       $('#result-table-div').hide();
       // Let the user know that the city in question could not be found and break the procedure here by returning false
-      Materialize.toast('Restaurants could not be found for the given city. Please try correcting the city name and/or country and try again');
+      Materialize.toast('Restaurants could not be found for the given city. Please try correcting the city name and/or country and try again', 1000);
       return false;
     }
   }).then(function() {
@@ -151,10 +150,10 @@ function getRestaurants(inputId){
     for (pageNum = 1; pageNum < callIterations + 1; pageNum++) {
       if (restrictCountry) {
         // Concatenate the necessary endpoint for the page in question
-        endpoint = 'http://opentable.herokuapp.com/api/restaurants?city=' + $(inputId).val().toString() +"&per_page=100" + "&page=" + (pageNum).toString() + "&country=" + $('#country-select').val();
+        endpoint = 'https://opentable.herokuapp.com/api/restaurants?city=' + $(inputId).val().toString() +"&per_page=100" + "&page=" + (pageNum).toString() + "&country=" + $('#country-select').val();
       } else {
         // Concatenate the necessary endpoint for the page in question
-        endpoint = 'http://opentable.herokuapp.com/api/restaurants?city=' + $(inputId).val().toString() +"&per_page=100" + "&page=" + (pageNum).toString();
+        endpoint = 'https://opentable.herokuapp.com/api/restaurants?city=' + $(inputId).val().toString() +"&per_page=100" + "&page=" + (pageNum).toString();
       }
       // Set the endpoint of the ajax settings to the newly created endpoint string
       settings.url = endpoint;
@@ -186,8 +185,13 @@ function loadRestaurants(page) {
   $('#result-table tbody > tr').remove();
   var restrictOutcode = $('#restrict-outcode-chk').is(':checked');
   var inputOutcode = $('#outcode-input').val();
+  try{
+    var numRestaurants = restaurantsForCity[page].length;
+  } catch (error) {
+    errorString = error;
+  }
   if (restrictOutcode) {
-  for (restaurant = 0; restaurant < restaurantsForCity[page].length; restaurant++) {
+  for (restaurant = 0; restaurant < numRestaurants; restaurant++) {
     var entry = restaurantsForCity[page][restaurant]
     if (entry.postal_code.indexOf(inputOutcode) == 0) {
       var name = entry.name;
@@ -204,7 +208,7 @@ function loadRestaurants(page) {
     $(pageId).addClass('active');
     }
   } else {
-  for (restaurant = 0; restaurant < restaurantsForCity[page].length; restaurant++) {
+  for (restaurant = 0; restaurant < numRestaurants; restaurant++) {
     var entry = restaurantsForCity[page][restaurant] 
     var name = entry.name;
     var address = entry.address + ", " + entry.city + ", " + entry.state + ", " + entry.postal_code + ", " + entry.country;
